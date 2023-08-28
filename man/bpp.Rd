@@ -7,17 +7,24 @@ Function which calculates pi, or other irrationals,  using the BaileyBorweinPlou
 THe BPP algorithm consists of a double summation over specified fractions. Rather than go into the gory details here, please refer to the link in the References section.  
 }
 \usage{
-bpp(k,pdat = c(1,16,8,4,0,0,-2,-1,-1,0,0),mpbits = 400)
+bpp(k,pdat = c(1,16,8,4,0,0,-2,-1,-1,0,0), init = 0, chunk = 1e4,...)
 }
 \arguments{
    \item{k}{
-The number of terms in the series to calculate.  Note that zero is a valid entry. 
+The number of terms in the series to calculate.  Note that zero is a valid entry. If a single value, the terms \code{0:k} are used.  If two values are provided (see information for the input parameter \code{init}), then the terms \code{k{1}:k[2]} are run.
 }
   \item{pdat}{
 The parameter \code{P} which is used to define the coefficients used in all fractions in each term of the series.  In brief, pdat contains the following BPP parameters:  \code{pdat(s,b,m,A)} where \code{A}comprises all elements of the vector \code{pdat} after the first three.  There are strict rules about the length of \code{A}; see the Details section.   
+The default value will calculate pi. 
 }
-  \item{mpbits}{
-This specifies the number of binary digits of precision to use when the function converts \code{gmp::bigq} fractions to \code{mpfr} extended precision decimal representation.  Failure to use a large enough value may result in a limit to the true output precision. 
+\item{init}{
+If there's a previous value calculated with \code{bpp} for a certain value of \code{k}, this term allows the user to continue the calculation. Assign the previous output's \code{bppgmp} value to  \code{init} . Note that one must set up the input \code{k} to start at one more than the previous run's maximum "k" value.  
+}
+\item{chunk}{ 
+There is a call to \code{sum} in the main loop of this function. Use \code{chunk} to specify how many terms to pass to the sum call at a time, thus reducing the peak memory requirements of this function.  The more RAM available on your machine, the larger this number can be.  Set to a value greater than the argument \code{k} to run a single "chunk," which is the fastest approach if sufficient memory is available. 
+}
+\item{...}{
+Optional arguments to pass to \code{\link[Rmpfr]{.bigq2mpfr}} . 
 }
 }
 \details{
@@ -27,7 +34,7 @@ The default values for \code{pdat} correspond to the coefficients used to genera
 Other values have been found to calculate a few other irrationals but there is as yet no known procedure to generate the \code{pdat} set for any given number.
 }
 \value{
-A list containing \code{bigq} , the \code{gmp} fraction calculated, and \code{mdec}, the \code{mpfr} decimal representation of said fraction. 
+A list containing \code{bppgmp} , the \code{gmp} fraction calculated; \code{bppval}, the \code{mpfr} decimal representation of said fraction; and \code{kvals}, echoing the input \code{k}. 
 }
 
 \references{
@@ -48,44 +55,11 @@ Carl Witthoft,  \email{carl@witthoft.com}
 # [126] 8 4 4 6 0
 
 # Lots of precision, but most of the digits are inaccurate.
- (bpp(5))
-# $bigq
-# Big Rational ('bigq') :
-# [1] 40413742330349316707/12864093722915635200
-# 
-# $mdec
-# 1 'mpfr' number of precision  400   bits 
-# [1] 3.14159265322808753473437803553620446955
-# 852801219780193481442230321585101644290504893051
-# 16201439239799241252867682875513665
+(bpp(5))
 
 # extend the series.
 (bpp(20))
-# $bigq
-# Big Rational ('bigq') :
-# [1] 6978810534836185743790248010742839687036
-# 9348283327260905420704007804969465293
-# 222142438704194558751308818610402859379
-# 08911653929817878006825259792072704000
-# 
-# $mdec
-# 1 'mpfr' number of precision  400   bits 
-# [1] 3.1415926535897932384626433832513
-# 62615881909316518417908555365030283
-# 2142940981052934064597204233958787472300102294523391693
 
-# Accurate but low precision
- bpp(20,mpbits=20)
-# $bigq
-# Big Rational ('bigq') :
-# [1] 6978810534836185743790248010742839
-# 6870369348283327260905420704007804969465293
-# 2221424387041945587513088186104028593790891
-# 1653929817878006825259792072704000
-# 
-# $mdec
-# 1 'mpfr' number of precision  20   bits 
-# [1] 3.1415939
 }
 
 

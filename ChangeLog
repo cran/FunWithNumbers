@@ -1,1 +1,2 @@
+* rev 1.2 : removed function "cfrac" as that is now part of the package "contFracR". Upgraded the "bpp" function. 
 * rev 1.1 : Fixed some man page defects. Added the Bailey–Borwein–Plouffe formula for calculating pi or other irrationals.   

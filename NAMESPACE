@@ -1,4 +1,4 @@
-export("aliquot", "benprob", "bestFrac", "cf2latex", "cfrac", "collatz", "juggatz", "morris", "sptable", "vaneck", "bpp")
+export("aliquot", "benprob", "bestFrac", "collatz", "juggatz", "morris", "sptable", "vaneck", "bpp")
 importFrom("utils", "combn")
 importFrom("gmp", "outer", "as.bigz", "factorize", "div.bigq", "as.bigq", "gcd", "numerator", "denominator")
-importFrom("Rmpfr","mpfr","roundMpfr", "getPrec")
+importFrom("Rmpfr","mpfr","roundMpfr", "getPrec", ".bigq2mpfr")

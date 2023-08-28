@@ -1,7 +1,9 @@
-# aliquot: subtract the sum all proper divisors of a number from that number to get the next number. This
+# aliquot:  the sum all proper divisors of a number from that number to get the next number.  A[j+1] = sum(divisors(A[j]))
 # is closely tied in w/ sociable and amicable numbers.  Remember 1 is a proper divisor
 # 
 
+#TODO: put in a test for cyclic behavior and terminate on same, indicating this happened
+# n.b. cycle of 2 is "amicable" and cycle of 3 or more is "sociable" . If takes a few terms to fall into  cycle, "aspiring" 
  aliquot<-function(x, maxiter=100) {
   # Need some sort of input validation, but might well want to feed a bigZ input.
   x <-as.bigz(x)
@@ -36,6 +38,8 @@
 			}
 		if (aliseq[j] <= 1) return(invisible(aliseq[!is.na(aliseq)])) 
 #check HERE for repetition 
+#TODO: fix this for cyclic rep by comparing [j] term with all previous terms, and if found,
+# calculate how long the cycle is.  E.g.,starting with 6 or 220 or 1,264,460
 		if (aliseq[j] == aliseq[j-1]){
 			return(invisible(aliseq[!is.na(aliseq)]))
 		}
@@ -48,17 +52,48 @@ return(invisible(aliseq[!is.na(aliseq)]))
 
 # Hailstone / Collatz sequence
 # If the current number is even, divide it by two; else if it is odd, multiply it by three and add one.   Convergence is < 200 for starts < 10 million or so.
-collatz<-function(x, maxiter = 1000) {
-x <- as.bigz(x)
-if (length(x) > 1) x<- x[1] #silent dumping
-y<-rep(as.bigz(0),maxiter)
-y[1]<-x
+# Fixes Nov 2022:  return truncated 'y' since nobody wants to see zeros; 
+# Also, as with the "collatz" library, allow the 3,2,1 parameters to be adjusted if desired.
+# Add a check whether we fell into a cycle, i.e. a value y[k] is repeated 
+# and finally, 'maxKnown' lets you select an integer for which you know 1:maxKnown all converge, so you can stop there
+
+# also: WhyTF so much slower than hailstone?  Need to analyze - 
+collatz<-function(x, div=2, mul=3, add= 1, maxKnown=1, maxiter = 1000) {
+x <- as.bigz(x[1])  #silent dumping
+# dma <- as.bigz(c(div,mul,add))
+maxKnown <- as.bigz(floor(maxKnown))
+cyclic = FALSE
+
+# ?? could it possibly be that creating and manipulating a long bigz vector is my mess?
+# ?? is  K[[j]] faster than K[j] for bigz ops???
+#  y<-rep(as.bigz(0),maxiter)
+y <- x
+# unlikely but could a while( jj<maxiter && !cyclic)  work better?
 for (jj in 2:maxiter) {
-	y[jj] <- if( as.integer( y[jj-1]%%2 ) ) y[jj-1] * 3 +1 else y[jj-1]/2
-	if (y[jj] <= 2) return(invisible(y[1:jj]))
+#	browser()
+# is as.numeric causing the timepig? Can I do the other if(y%%div != 0) to avoid casting?
+#	y[[jj]] <- if( as.numeric( y[[jj-1]]%%dma[[1]] ) ) y[[jj-1]] * dma[[2]] + add else y[[jj-1]] %/% dma[[1]]
+#  will making this a subfunc help by reducing [[.bigz ops?,
+# or just not converting dma to bigz?    		
+#	y[[jj]] <- if(  y[[jj-1]] %% div != 0 )  y[[jj-1]] * mul + add else y[[jj-1]] %/% div	
+	y[[jj]] <- collatz_fun(y[[jj-1]],div,mul,add)
+   # bigz/bigz returns a bigq even if that bigq has denominator 1
+    # so we do a divq, "%/%", instead of div, to just get the bigz.
+	if (y[[jj]] <= maxKnown   ) break 
+
+# now check for cycles, keeeping in mind bigz doesn't play nice with %in%  . BUT, since
+# y[jj] is  a single value, any() will work here
+
+	if(any(y[[jj]] == y[[1:(jj-1)]]))	{
+		cyclic = TRUE
+		break
 	}
-	warning('not converged (yet)')
-	return(invisible(y))
+}
+	if (jj >= maxiter) 	warning('not converged (yet)')
+	return(invisible(list(y = y, div = div, mul=mul, add= add, cyclic = cyclic) ) )
 }
 
+collatz_fun <- function(n, d, m, a){
+	if (n%%d ==0 ) ( n %/% d ) else (m*n) +a
+}
 

@@ -5,7 +5,7 @@
 Generate a sequence 'invented' by Jan Ritsema Van Eck
 }
 \description{
-This function generates an interesting (to the author, at least) sequence listed as number A181391 in the \url{http://oeis.org/}. See Details for a full description. 
+This function generates an interesting (to the author, at least) sequence listed as number A181391 in the \url{https://oeis.org/}. See Details for a full description. 
 }
 \usage{
 vaneck(howlong = 100, ve = NULL, ...)
@@ -31,7 +31,7 @@ Term 3: Since we have seen a 0 before, one step back, the third term is 1
 Term 4: Since we havent seen a 1 before, the fourth term is 0
 Term 5: Since we have seen a 0 before, two steps back, the fifth term is 2.
 And so on.
-As of this release of this R-package, how fast max(sequence) grows, and  whether every number eventually appears,  are open questions. The latest investigations and theorems related to this sequence can be found at \url{http://oeis.org/A181391/}
+As of this release of this R-package, how fast max(sequence) grows, and  whether every number eventually appears,  are open questions. The latest investigations and theorems related to this sequence can be found at \url{https://oeis.org/A181391/}
 }
 \value{
 \item{ve}{
@@ -42,7 +42,7 @@ a vector of the unique values in \code{ve}
 }
 }
 \references{
-\url{http://oeis.org/A181391/}
+\url{https://oeis.org/A181391/}
 %% ~put references to the literature/web site here ~
 }
 \author{

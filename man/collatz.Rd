@@ -8,12 +8,24 @@ Test the Collatz Conjecture. ~~
 This function calculates the Collatz (aka Hailstone) sequence based on the selected starting integer.  
 }
 \usage{
-collatz(x, maxiter = 1000)
+collatz(x, div=2, mul=3, add= 1, maxKnown=1, maxiter = 1000)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
 The integer, or \code{bigz} integer to start with. 
+}
+\item{div}{
+The integer to divide by. Default is \code{2} per the original Collatz formula.
+}
+\item{mul}{
+The integer to multiply by. Default is \code{3} per the original Collatz formula.
+}
+\item{add}{
+The integer to add after multiply. Default is \code{1} per the original Collatz formula.
+}
+\item{maxKnown}{
+An integer to use as a "shortcut" if you know that said value converges. This allows the user to avoid repeating previous calculations.  Default value is \code{1}, i.e. no previous knowledge of converging numbers. 
 }
   \item{maxiter}{
 A "safety switch" to avoid possible lengthy runtimes (when starting with very very large numbers), terminating the function prior to convergence. 
