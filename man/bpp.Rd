@@ -28,8 +28,8 @@ Optional arguments to pass to \code{\link[Rmpfr]{.bigq2mpfr}} .
 }
 }
 \details{
-The BPP algorithm calculates the sum{K=0,k, 1/(b^K) * FracSum} , where FracSum is defined by the sum(M=1,m, A[M]/(m*K + M)^s) .  This means that the number of elements of \code{A} must equal \code{m}. Zero values are legal and are used to reject fractions not wanted in the inner sum. 
-
+The BPP algorithm calculates the sum(K=0,k, 1/(b^K) * FracSum) , where FracSum is defined by the sum(M=1,m, A[M]/(m*K + M)^s) .
+  This means that the number of elements of \code{A} must equal \code{m}. Zero values are legal and are used to reject fractions not wanted in the inner sum. 
 The default values for \code{pdat} correspond to the coefficients used to generate pi (the sum to infinity is mathematically equal to pi).
 Other values have been found to calculate a few other irrationals but there is as yet no known procedure to generate the \code{pdat} set for any given number.
 }

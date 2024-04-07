@@ -17,7 +17,7 @@ bpp <- function(k,pdat = c(1,16,8,4,0,0,-2,-1,-1,0,0), init = 0, chunk = 1e4,...
 if(length(pdat) != pdat[3]+3){
 	stop('The number of "A" coeffs does not match value of "m" ')
 }
-pdat = as.bigq(floor(pdat))  #gets rid of decimal crap, too
+pdat = gmp::as.bigq(floor(pdat))  #gets rid of decimal crap, too
 s = pdat[1]
 b = pdat[2]
 m = pdat[3]
@@ -38,6 +38,6 @@ for (jchunk in 1:nchunk){
 		bpp <- bpp + sum(A[ja]/(m*bjk + ja)^s * 1/b^(bjk))
 	}
 }
-thedec <- .bigq2mpfr(bpp, ...) 
+thedec <- Rmpfr::.bigq2mpfr(bpp, ...) 
 return(invisible(list(bppgmp = bpp, bppval = thedec, kvals = k )))
 }

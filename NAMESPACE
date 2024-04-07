@@ -1,4 +1,7 @@
-export("aliquot", "benprob", "bestFrac", "collatz", "juggatz", "morris", "sptable", "vaneck", "bpp")
+export("aliquot", "benprob", "bestFrac", "collatz", "juggatz", "morris", "sptable", "vaneck", "bpp","dontWorry", "harshad", "kaprekar", "factorion")
 importFrom("utils", "combn")
-importFrom("gmp", "outer", "as.bigz", "factorize", "div.bigq", "as.bigq", "gcd", "numerator", "denominator")
-importFrom("Rmpfr","mpfr","roundMpfr", "getPrec", ".bigq2mpfr")
+importFrom("bigBits", "base2base",  "noExp")
+
+importFrom("gmp", "outer",  "as.bigz","factorize", "div.bigq", "gcd", "as.bigq","pow.bigq", "is.bigz", "numerator" , "denominator")
+importFrom("Rmpfr", "mpfr",  ".mpfr2bigz", ".bigz2mpfr", "is.mpfr", "formatDec","roundMpfr", "getPrec", ".bigq2mpfr")
+importFrom("methods", "is", "as")

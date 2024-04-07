@@ -34,23 +34,23 @@ return(invisible(list(uniqsum= length(uniqsum), uniqprod= length(uniqprod), spra
 juggatz <-function(x, maxiter = 1000, prec = 1e2) {
 # only want one value
 if (length(x) > 1) {
-	x <- x[1]
+	x <- x[[1]]
 	warning('Only first element of x will be used')
 }
 # as.bigz(bigq) acts as floor function
 
-x <- floor(mpfr(x[1], prec) )
+x <- floor(Rmpfr::mpfr(x[1], prec) )
 if (length(x) > 1) x<- x[1] #silent dumping
-y<-rep(mpfr(0,prec),maxiter)
+y<-rep(Rmpfr::mpfr(0,prec),maxiter)
 y[1]<-x
-# but gmp doesn't support irrationals, so have to do x^k via mpfr
+# gmp doesn't support irrationals, so have to do x^k via mpfr
 for (jj in 2:maxiter) {
 # check both up and down.  check log(y) < prectmp/100 to decrease....
-	 prectmp <- getPrec(y[jj-1])
+	 prectmp <- Rmpfr::getPrec(y[jj-1])
 	 if (log(y[jj-1]) > prectmp/10 ){
-		 y[jj-1] <- roundMpfr(y[jj-1],prectmp*10)
+		 y[jj-1] <- Rmpfr::roundMpfr(y[jj-1],prectmp*10)
 		} else {
-			if(log(y[jj-1]) < prectmp/100) y[jj-1] <- roundMpfr(y[jj-1],prectmp / 10)
+			if(log(y[jj-1]) < prectmp/100) y[jj-1] <- Rmpfr::roundMpfr(y[jj-1],prectmp / 10)
 	 		}
 	y[jj] <- floor(y[jj-1]^(0.5 + y[jj-1]%%2))  # cool, huh
 	if (y[jj] < 2 ) return(invisible(y[1:jj]))
